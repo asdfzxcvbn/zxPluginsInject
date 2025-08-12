@@ -1,17 +1,17 @@
 #import "Header.h"
 
-%hook CKEntitlements
-- (id)initWithEntitlementsDict:(NSDictionary *)entitlements {
-	NSMutableDictionary *mutableDict = [entitlements mutableCopy];
-	[mutableDict removeObjectForKey:@"com.apple.developer.icloud-container-environment"];
-	[mutableDict removeObjectForKey:@"com.apple.developer.icloud-services"];
-	return %orig([mutableDict copy]);
-}
-%end
-
 %hook CKContainer
 - (id)_setupWithContainerID:(id)a options:(id)b { return nil; }
 - (id)_initWithContainerIdentifier:(id)a { return nil; }
+%end
+
+%hook CKEntitlements
+- (id)initWithEntitlementsDict:(NSDictionary *)entitlements {
+	NSMutableDictionary *mutEntitlements = [entitlements mutableCopy];
+	[mutEntitlements removeObjectForKey:@"com.apple.developer.icloud-container-environment"];
+	[mutEntitlements removeObjectForKey:@"com.apple.developer.icloud-services"];
+	return %orig([mutEntitlements copy]);  // why? whatever
+}
 %end
 
 %hook NSFileManager
